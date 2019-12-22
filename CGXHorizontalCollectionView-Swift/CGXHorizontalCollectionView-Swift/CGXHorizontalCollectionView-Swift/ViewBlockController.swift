@@ -10,7 +10,6 @@ import UIKit
 
 class ViewBlockController: UIViewController {
     
-    
     var lisView1 = CGXHorizontalCollectionView()
     var lisView2 = CGXHorizontalCollectionView()
     override func viewDidLoad() {

@@ -20,7 +20,6 @@ typedef UICollectionViewCell* (^CGXCollectionViewBaseViewCellForItemBlock)(CGXHo
  **/
 typedef void (^CGXCollectionViewBaseViewDidSelectItemBlock)(CGXHorizontalCollectionView *baseView,UICollectionView *collectionView,NSIndexPath *indexPath);
 
-
 /**
  滚动cell
  **/

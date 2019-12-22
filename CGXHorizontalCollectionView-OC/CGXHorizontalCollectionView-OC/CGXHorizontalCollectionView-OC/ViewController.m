@@ -22,6 +22,7 @@
     // Do any additional setup after loading the view, typically from a nib.
     self.view.backgroundColor = [UIColor lightGrayColor];
     
+    
     CGXHorizontalCollectionView *horizontalView = [[CGXHorizontalCollectionView alloc] init];
     horizontalView.frame = CGRectMake(0, 100, self.view.frame.size.width, 200);
     [self.view addSubview:horizontalView];
