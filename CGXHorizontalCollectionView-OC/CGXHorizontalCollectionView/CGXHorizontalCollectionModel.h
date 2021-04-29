@@ -20,7 +20,7 @@ typedef NS_ENUM(NSInteger, CGXHorizontalCollectionModelType){
 @interface CGXHorizontalCollectionModel : NSObject
 
 @property (nonatomic , assign) CGXHorizontalCollectionModelType type;
-
+@property (nonatomic , assign) BOOL isHcornerBorder;
 @property (nonatomic , strong) UIColor *borderColor;
 @property (nonatomic , assign) CGFloat borderWidth;
 @property (nonatomic , assign) BOOL isHcornerRadius;
@@ -28,6 +28,9 @@ typedef NS_ENUM(NSInteger, CGXHorizontalCollectionModelType){
 
 @property (nonatomic , strong) UIColor *backgroundColor;
 @property (nonatomic , strong) id dataModel;
+
+/** 加载图片 */
+@property (nonatomic, copy) void(^horizontal_loadImageBlock)(UIImageView *hotImageView);
 
 @end
 

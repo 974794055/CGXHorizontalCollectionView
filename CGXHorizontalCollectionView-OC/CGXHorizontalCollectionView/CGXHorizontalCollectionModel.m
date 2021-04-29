@@ -19,8 +19,10 @@
         self.borderColor = [UIColor colorWithRed:204.0/255.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
         self.borderWidth = 1;
         self.cornerRadius = 4;
-        self.backgroundColor = [UIColor orangeColor];
-        self.isHcornerRadius = YES;
+        self.backgroundColor = [UIColor whiteColor];
+        self.isHcornerRadius = NO;
+        self.isHcornerBorder = NO;
+        
     }
     return self;
 }

@@ -16,6 +16,8 @@
 		9E17F1C32309132800297674 /* CGXHorizontalCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E17F1C02309132800297674 /* CGXHorizontalCollectionCell.m */; };
 		9E17F1C42309132800297674 /* CGXHorizontalCollectionModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E17F1C12309132800297674 /* CGXHorizontalCollectionModel.m */; };
 		9E17F1C52309132800297674 /* CGXHorizontalCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E17F1C22309132800297674 /* CGXHorizontalCollectionView.m */; };
+		B56B1665262C8DB800C89ECB /* CGXHorizontalCustomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B56B1663262C8DB800C89ECB /* CGXHorizontalCustomCell.m */; };
+		B5C6B82525B86A4F00241305 /* CGXHorizontalCollectionLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C6B82425B86A4F00241305 /* CGXHorizontalCollectionLayout.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,10 +34,13 @@
 		9E17F1BC2309132800297674 /* CGXHorizontalCollectionModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGXHorizontalCollectionModel.h; sourceTree = "<group>"; };
 		9E17F1BD2309132800297674 /* CGXHorizontalCollectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGXHorizontalCollectionCell.h; sourceTree = "<group>"; };
 		9E17F1BE2309132800297674 /* CGXHorizontalCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGXHorizontalCollectionView.h; sourceTree = "<group>"; };
-		9E17F1BF2309132800297674 /* CGXHorizontalCollectionViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGXHorizontalCollectionViewDelegate.h; sourceTree = "<group>"; };
 		9E17F1C02309132800297674 /* CGXHorizontalCollectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CGXHorizontalCollectionCell.m; sourceTree = "<group>"; };
 		9E17F1C12309132800297674 /* CGXHorizontalCollectionModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CGXHorizontalCollectionModel.m; sourceTree = "<group>"; };
 		9E17F1C22309132800297674 /* CGXHorizontalCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CGXHorizontalCollectionView.m; sourceTree = "<group>"; };
+		B56B1663262C8DB800C89ECB /* CGXHorizontalCustomCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CGXHorizontalCustomCell.m; sourceTree = "<group>"; };
+		B56B1664262C8DB800C89ECB /* CGXHorizontalCustomCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGXHorizontalCustomCell.h; sourceTree = "<group>"; };
+		B5C6B82325B86A4F00241305 /* CGXHorizontalCollectionLayout.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CGXHorizontalCollectionLayout.h; sourceTree = "<group>"; };
+		B5C6B82425B86A4F00241305 /* CGXHorizontalCollectionLayout.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CGXHorizontalCollectionLayout.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +77,8 @@
 				9E17F1A62309123900297674 /* AppDelegate.m */,
 				9E17F1A82309123900297674 /* ViewController.h */,
 				9E17F1A92309123900297674 /* ViewController.m */,
+				B56B1664262C8DB800C89ECB /* CGXHorizontalCustomCell.h */,
+				B56B1663262C8DB800C89ECB /* CGXHorizontalCustomCell.m */,
 				9E17F1BB2309132800297674 /* CGXHorizontalCollectionView */,
 				9E17F1AB2309123900297674 /* Main.storyboard */,
 				9E17F1AE2309123A00297674 /* Assets.xcassets */,
@@ -87,11 +94,12 @@
 			children = (
 				9E17F1BE2309132800297674 /* CGXHorizontalCollectionView.h */,
 				9E17F1C22309132800297674 /* CGXHorizontalCollectionView.m */,
+				B5C6B82325B86A4F00241305 /* CGXHorizontalCollectionLayout.h */,
+				B5C6B82425B86A4F00241305 /* CGXHorizontalCollectionLayout.m */,
 				9E17F1BD2309132800297674 /* CGXHorizontalCollectionCell.h */,
 				9E17F1C02309132800297674 /* CGXHorizontalCollectionCell.m */,
 				9E17F1BC2309132800297674 /* CGXHorizontalCollectionModel.h */,
 				9E17F1C12309132800297674 /* CGXHorizontalCollectionModel.m */,
-				9E17F1BF2309132800297674 /* CGXHorizontalCollectionViewDelegate.h */,
 			);
 			name = CGXHorizontalCollectionView;
 			path = ../../CGXHorizontalCollectionView;
@@ -170,6 +178,8 @@
 				9E17F1C32309132800297674 /* CGXHorizontalCollectionCell.m in Sources */,
 				9E17F1AA2309123900297674 /* ViewController.m in Sources */,
 				9E17F1B52309123A00297674 /* main.m in Sources */,
+				B56B1665262C8DB800C89ECB /* CGXHorizontalCustomCell.m in Sources */,
+				B5C6B82525B86A4F00241305 /* CGXHorizontalCollectionLayout.m in Sources */,
 				9E17F1C52309132800297674 /* CGXHorizontalCollectionView.m in Sources */,
 				9E17F1A72309123900297674 /* AppDelegate.m in Sources */,
 				9E17F1C42309132800297674 /* CGXHorizontalCollectionModel.m in Sources */,

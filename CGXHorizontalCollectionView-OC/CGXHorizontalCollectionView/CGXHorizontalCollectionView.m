@@ -7,11 +7,13 @@
 //
 
 #import "CGXHorizontalCollectionView.h"
-
+#import "CGXHorizontalCollectionLayout.h"
 @interface CGXHorizontalCollectionView()
 
 @property (nonatomic , strong , readwrite) NSMutableArray<CGXHorizontalCollectionModel *> *dataArray;
+@property (nonatomic , strong , readwrite) UICollectionView *collectionView;
 
+@property (nonatomic , strong )CGXHorizontalCollectionLayout *flowLayout;
 @end
 
 @implementation CGXHorizontalCollectionView
@@ -33,49 +35,115 @@
     }
     return self;
 }
+- (void)willMoveToSuperview:(UIView *)newSuperview {
+    [super willMoveToSuperview:newSuperview];
+    UIResponder *next = newSuperview;
+    while (next != nil) {
+        if ([next isKindOfClass:[UIViewController class]]) {
+            ((UIViewController *)next).automaticallyAdjustsScrollViewInsets = NO;
+            break;
+        }
+        next = next.nextResponder;
+    }
+}
 - (void)initializeViews
 {
+    self.backgroundColor = [UIColor whiteColor];
     self.row = 3;
     self.minimumLineSpacing = 10;
     self.minimumInteritemSpacing = 10;
     self.insets = UIEdgeInsetsMake(10, 10, 10, 10);
-    self.collectionViewBGColor = [UIColor whiteColor];
-    self.showsVerticalScrollIndicator = NO;
     self.showsHorizontalScrollIndicator = NO;
     self.space = 0;
     self.row = 3;
     self.section= 1;
     self.bounces = YES;
-    UICollectionViewFlowLayout*flowLayout= [[UICollectionViewFlowLayout alloc] init];
+    self.stop = NO;
+    CGXHorizontalCollectionLayout*flowLayout= [[CGXHorizontalCollectionLayout alloc] init];
     flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-    _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame)) collectionViewLayout:flowLayout];
-    _collectionView.delegate = self;
-    _collectionView.dataSource = self;
-    _collectionView.showsVerticalScrollIndicator = self.showsVerticalScrollIndicator;
-    _collectionView.showsHorizontalScrollIndicator = self.showsHorizontalScrollIndicator;
-    _collectionView.bounces = self.bounces;
-    _collectionView.backgroundColor = self.collectionViewBGColor;
-    [_collectionView registerClass:[CGXHorizontalCollectionCell class] forCellWithReuseIdentifier:NSStringFromClass([CGXHorizontalCollectionCell class])];
+    flowLayout.stop = self.stop;
+    self.flowLayout = flowLayout;
+    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame)) collectionViewLayout:flowLayout];
+    self.collectionView.delegate = self;
+    self.collectionView.dataSource = self;
+    self.collectionView.showsVerticalScrollIndicator = NO;
+    self.collectionView.showsHorizontalScrollIndicator = self.showsHorizontalScrollIndicator;
+    self.collectionView.bounces = self.bounces;
+    self.collectionView.backgroundColor = self.backgroundColor;
+    [self.collectionView registerClass:[CGXHorizontalCollectionCell class] forCellWithReuseIdentifier:NSStringFromClass([CGXHorizontalCollectionCell class])];
+    [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:NSStringFromClass([UICollectionViewCell class])];
+    //给collectionView注册头分区的Id
+    [self.collectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:NSStringFromClass([UICollectionReusableView class])];
+    //给collection注册脚分区的id
+    [self.collectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:NSStringFromClass([UICollectionReusableView class])];
     [self addSubview:_collectionView];
     if (@available(iOS 11.0, *)) {
-        _collectionView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+        self.collectionView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
     }
     if (@available(iOS 10.0, *)) {
-        _collectionView.prefetchingEnabled = NO;
+        self.collectionView.prefetchingEnabled = NO;
     }
+    self.collectionView.alwaysBounceHorizontal = YES;
+    self.collectionView.decelerationRate = UIScrollViewDecelerationRateFast;
 }
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    self.collectionView.frame = CGRectMake(0, 0, CGRectGetWidth(self.bounds), floor(self.bounds.size.height));
+    self.collectionView.backgroundColor = self.backgroundColor;
+    self.collectionView.frame = CGRectMake(0, 0, CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
     [self.collectionView reloadData];
 }
-- (void)registerCellClass:(Class)cell
+- (void)registerCellClass:(Class)classCell IsXib:(BOOL)isXib
 {
-    NSAssert([cell isKindOfClass:[UICollectionViewCell class]] , @"cell类型需要是UICollectionViewCell");
-    [self.collectionView registerClass:[cell class] forCellWithReuseIdentifier:NSStringFromClass([cell class])];
+    NSAssert(![classCell isKindOfClass:[UICollectionViewCell class]] , @"cell类型需要是UICollectionViewCell");
+    if (isXib) {
+        [self.collectionView registerNib:[UINib nibWithNibName:[NSString stringWithFormat:@"%@", classCell] bundle:nil] forCellWithReuseIdentifier:[NSString stringWithFormat:@"%@", classCell]];
+        
+    } else{
+        [self.collectionView registerClass:classCell forCellWithReuseIdentifier:[NSString stringWithFormat:@"%@", classCell]];
+    }
+}
+- (void)registerFooter:(Class)footer IsXib:(BOOL)isXib
+{
+    if (![footer isKindOfClass:[UICollectionReusableView class]]) {
+        NSAssert(![footer isKindOfClass:[UICollectionReusableView class]], @"注册cell的registerCellAry数组必须是UICollectionReusableView类型");
+    }
+    if (isXib) {
+        [self.collectionView registerNib:[UINib nibWithNibName:[NSString stringWithFormat:@"%@", footer] bundle:nil] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:[NSString stringWithFormat:@"%@", footer]];
+    } else{
+        [self.collectionView registerClass:footer forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:[NSString stringWithFormat:@"%@", footer]];
+    }
+}
+- (void)registerHeader:(Class)header IsXib:(BOOL)isXib
+{
+    if (![header isKindOfClass:[UICollectionReusableView class]]) {
+        NSAssert(![header isKindOfClass:[UICollectionReusableView class]], @"注册cell的registerCellAry数组必须是UICollectionReusableView类型");
+    }
+    if (isXib) {
+        [self.collectionView registerNib:[UINib nibWithNibName:[NSString stringWithFormat:@"%@", header] bundle:nil] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:[NSString stringWithFormat:@"%@", header]];
+    } else{
+        [self.collectionView registerClass:header forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:[NSString stringWithFormat:@"%@", header]];
+    }
 }
 
+- (void)setBounces:(BOOL)bounces
+{
+    _bounces = bounces;
+    self.collectionView.bounces = bounces;
+}
+- (void)setShowsHorizontalScrollIndicator:(BOOL)showsHorizontalScrollIndicator
+{
+    _showsHorizontalScrollIndicator = showsHorizontalScrollIndicator;
+    self.collectionView.showsHorizontalScrollIndicator = showsHorizontalScrollIndicator;
+}
+- (void)setStop:(BOOL)stop
+{
+    _stop = stop;
+    self.flowLayout.stop =stop;
+    self.collectionView.collectionViewLayout = self.flowLayout;
+    [self.collectionView.collectionViewLayout invalidateLayout];
+    [self.collectionView reloadData];
+}
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
     return 1;
@@ -115,28 +183,47 @@
     CGFloat height = ((CGRectGetHeight(collectionView.frame)- spaceV) - (self.section - 1) * self.minimumLineSpacing) / self.section;
     
     CGFloat width = ((CGRectGetWidth(collectionView.frame)-spaceH) -self.space - (self.row -1) *self.minimumInteritemSpacing) / self.row;
-    return CGSizeMake(width,height);
+    return CGSizeMake(width,floor(height));
+}
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section
+{
+        return CGSizeMake(50, CGRectGetWidth(collectionView.frame));
+}
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section
+{
+        return CGSizeMake(30, CGRectGetWidth(collectionView.frame));
+}
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+{
+    if (kind == UICollectionElementKindSectionHeader) {
+        UICollectionReusableView *headview = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:NSStringFromClass([UICollectionReusableView class]) forIndexPath:indexPath];
+        headview.backgroundColor = collectionView.backgroundColor;
+        headview.backgroundColor = [UIColor orangeColor];
+        return headview;
+    } else {
+        UICollectionReusableView *footview = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:NSStringFromClass([UICollectionReusableView class]) forIndexPath:indexPath];
+        footview.backgroundColor = collectionView.backgroundColor;;
+        footview.backgroundColor = [UIColor yellowColor];
+        return footview;
+    }
 }
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (self.cellForItemBlock) {
-        return self.cellForItemBlock(self, collectionView, indexPath);
+        return self.cellForItemBlock(self, indexPath);
     }
-    if (self.delegate && [self.delegate respondsToSelector:@selector(collectionHorizontalView:collectionView:cellForItemAtIndexPath:)]) {
-        return [self.delegate collectionHorizontalView:self collectionView:collectionView cellForItemAtIndexPath:indexPath];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(collectionHorizontalView:cellForItemAtIndexPath:)]) {
+        return [self.delegate collectionHorizontalView:self cellForItemAtIndexPath:indexPath];
     }
     CGXHorizontalCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:NSStringFromClass([CGXHorizontalCollectionCell class]) forIndexPath:indexPath];
     CGXHorizontalCollectionModel *model = self.dataArray[indexPath.row];
     [cell updateWithModel:model];
-    if (self.delegate && [self.delegate respondsToSelector:@selector(collectionHorizontalView:baseCell:cellShowItemAt:)]) {
-        [self.delegate collectionHorizontalView:self baseCell:cell cellShowItemAt:indexPath];
-    }
     return cell;
 }
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (self.didSelectItemBlock) {
-        self.didSelectItemBlock(self, collectionView, indexPath);
+        self.didSelectItemBlock(self, indexPath);
     }
     if (self.delegate && [self.delegate respondsToSelector:@selector(collectionHorizontalView:DidSelectItemAtIndexPath:)]) {
         [self.delegate collectionHorizontalView:self DidSelectItemAtIndexPath:indexPath];
@@ -158,6 +245,23 @@
         [self.dataArray addObject:model];
     }
     [self.collectionView reloadData];
+}
+- (void)updateWithModel:(CGXHorizontalCollectionModel *)model AtIndex:(NSInteger)index
+{
+    if (self.dataArray.count == 0) {
+        return;
+    }
+    if (index>=self.dataArray.count) {
+        return;
+    }
+    __weak typeof(self) weakSelf = self;
+    [UIView animateWithDuration:0 animations:^{
+      [weakSelf.collectionView performBatchUpdates:^{
+          [weakSelf.dataArray replaceObjectAtIndex:index withObject:model];
+          [weakSelf.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]]];
+      } completion:nil];
+    }];
+    
 }
 /*
  // Only override drawRect: if you perform custom drawing.

@@ -1,13 +1,13 @@
 //
-//  CGXCollectionViewGeneralCell.m
+//  CGXHorizontalCustomCell.m
 //  CGXHorizontalCollectionView-OC
 //
-//  Created by CGX on 2019/10/01.
-//  Copyright © 2019年 CGX. All rights reserved.
+//  Created by MacMini-1 on 2021/4/16.
+//  Copyright © 2021 曹贵鑫. All rights reserved.
 //
 
-#import "CGXHorizontalCollectionCell.h"
-@interface CGXHorizontalCollectionCell ()
+#import "CGXHorizontalCustomCell.h"
+@interface CGXHorizontalCustomCell ()
 @property (nonatomic,strong) CGXHorizontalCollectionModel *model;
 @property (nonatomic , strong) NSLayoutConstraint *hotImageTop;
 @property (nonatomic , strong) NSLayoutConstraint *hotImageLeft;
@@ -15,8 +15,7 @@
 @property (nonatomic , strong) NSLayoutConstraint *hotImageBottom;
 
 @end
-
-@implementation CGXHorizontalCollectionCell
+@implementation CGXHorizontalCustomCell
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
